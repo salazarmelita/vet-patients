@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 import Alerta from './Alerta.vue'
 
 const alerta = reactive({
@@ -7,9 +7,13 @@ const alerta = reactive({
     mensaje:''
 }) 
 
-defineEmits(['update:nombre', 'update:propietario', 'update:email', 'update:email', 'update:alta', 'update:sintomas'])
+const emit =   defineEmits(['update:nombre', 'update:propietario', 'update:email', 'update:email', 'update:alta', 'update:sintoma', 'guardar-paciente'])
 
 const props = defineProps({
+    id: {
+        type: [String, null],
+        required: true
+    },
     nombre: {
         type: String,
         required: true
@@ -29,17 +33,29 @@ const props = defineProps({
     sintoma: {
         type: String,
         required: true
-    }
+    },
 })
 
 const validar = e => {
-    if(Object.values(paciente).includes('')){
+    if(Object.values(props).includes('')){
        alerta.mensaje = 'Todos los campos son obligatorios'
        alerta.tipo = 'error'
        return
     }
-    console.log('después del if')
+    emit('guardar-paciente')
+    alerta.mensaje = 'Paciente almacenado correctamente'
+    alerta.tipo = 'exito'
+    setTimeout(()=>{
+        Object.assign(alerta, {
+            tipo: '',
+            mensaje: ''
+        })
+    }, 3000)
 }
+
+const editando = computed(()=>{ props.id
+})
+
 </script>
 
 <template>
@@ -82,11 +98,12 @@ const validar = e => {
                 <label for="sintoma" class="block text-gray-700 uppercase font-bold text-[12px]">
                     Síntomas
                 </label>
-                <input id="síntoma" type="textarea" placeholder="Describe los síntomas" :value="sintoma" @input="$emit('update:sintoma', $event.target.value)"
+                <input id="sintoma" type="textarea" placeholder="Describe los síntomas" :value="sintoma" @input="$emit('update:sintoma', $event.target.value)"
                     class="border-2  h-[80px] w-full p-2 mt-2 placeholder-gray-400 rounded-md placeholder:text-[12px]">
             </div>
             <input type="submit"
-                class="bg-indigo-600 w-full p-3 text-white uppercase rounded-md font-bold text-[14px] hover:bg-indigo-700 cursor-pointer transition-colors">
+                class="bg-indigo-600 w-full p-3 text-white uppercase rounded-md font-bold text-[14px] hover:bg-indigo-700 cursor-pointer transition-colors"
+                :value="[editando ? 'Guardar Cambios' : 'Registrar Paciente']">
         </form>
     </div>
 </template>
