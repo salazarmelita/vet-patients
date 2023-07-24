@@ -23,7 +23,7 @@ watch(pacientes, ()=> {
 })
 
 const guardarLocalStorage = () => {
-  localStorage.setItem('paciente', JSON.stringify(pacientes.value))
+  localStorage.setItem('pacientes', JSON.stringify(pacientes.value))
 }
 
 onMounted(()=>{
@@ -80,7 +80,7 @@ const eliminarPaciente = (id)=>{
     <Header />
     <div class="mt-12 md:flex">
       <Formulario v-model:nombre="paciente.nombre" v-model:propietario="paciente.propietario"
-        v-model:email="paciente.email" v-model:alta="paciente.alta" @guardar-paciente="guardarPaciente" :id="paciente.id"/>
+        v-model:email="paciente.email" v-model:alta="paciente.alta" v-model:sintoma="paciente.sintoma" @guardar-paciente="guardarPaciente" :id="paciente.id"/>
       <div class="md:w-1/2 md:h-screen overflow-y-scroll">
         <h3 class="font-black text-3xl text-center">Administra tus pacientes</h3>
         <div v-if="pacientes.length > 0">
